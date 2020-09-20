@@ -1,9 +1,8 @@
 package net.piedevelopers.mvvmkotlin.auth
 
 import android.view.View
-import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
-import java.util.*
+import net.piedevelopers.mvvmkotlin.repo.UserRepo
 
 class AuthViewModel:ViewModel() {
     var email :String?=null;
@@ -22,7 +21,12 @@ class AuthViewModel:ViewModel() {
             isenabled=true
             return
         }
-        authListner?.OnSucess()
+        //this is bad practice because we are making AuthViewModel Class Dependent on UserRepo class
+        // (in short we are creating a instance of UserRepo class here).Therefore we use  dependency injection.
+
+        val loginresponse=UserRepo().userLogin(email!!,password!!)
+
+        authListner?.OnSucess(loginresponse)
         isenabled=true
     }
 

@@ -1,13 +1,17 @@
 package net.piedevelopers.mvvmkotlin.auth
 
-import android.database.DatabaseUtils
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.DataBindingUtil.setContentView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.activity_login.*
 import net.piedevelopers.mvvmkotlin.R
 import net.piedevelopers.mvvmkotlin.databinding.ActivityLoginBinding
+import net.piedevelopers.mvvmkotlin.util.hide
+import net.piedevelopers.mvvmkotlin.util.show
 import net.piedevelopers.mvvmkotlin.util.toast
 
 class LoginActivity : AppCompatActivity(),
@@ -26,16 +30,22 @@ class LoginActivity : AppCompatActivity(),
     }
 
     override fun OnStarted() {
+     progress_bar.show()
         toast("Login Started")
 
 
     }
 
-    override fun OnSucess() {
-        toast("Login Success")
+    override fun OnSucess(loginresponse: LiveData<String>) {
+
+      loginresponse.observe(this, Observer {
+          progress_bar.hide()
+          toast(it)
+      })
     }
 
     override fun OnFailure(message: String) {
+        progress_bar.hide()
         toast(message)
 
     }
